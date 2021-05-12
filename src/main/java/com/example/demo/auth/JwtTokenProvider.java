@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.example.demo.User;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -32,12 +34,15 @@ public class JwtTokenProvider {
 		return secretKey;
 	}
 	
-	public String createToken() {
+	public String createToken(User user) {
 		SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
 		Date validity = new Date();
 		LocalDateTime.from(validity.toInstant()).plusDays(3);
+		Claims claims = Jwts.claims().setSubject(user.getName());
+		claims.put("id", user.getId());
+		claims.put("role", user.getRole());
 		String jws = Jwts.builder()
-					.setSubject("Joe")
+					.setClaims(claims)
 					.setExpiration(validity)
 					.signWith(key)
 					.compact();

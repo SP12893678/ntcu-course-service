@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,6 +34,9 @@ public class App {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
+    @Autowired
+    private JavaMailSender mailSender;
+	
 	@RequestMapping("/")
 	public String index() {
 		return "<h1>Welecome to listeningtrain platform service</h1>";
@@ -47,8 +52,8 @@ public class App {
 	}
 	
 	@RequestMapping(value = "/api/auth/register", method = RequestMethod.POST)
-	public String userRegister(@RequestBody User request) throws IOException {
-//		UserDB.register();
+	public String userRegister(@RequestBody HTTPRequestBody request) throws IOException {
+		UserDB.register(request.getUser(),mailSender,jwtTokenProvider,jdbcTemplate);
 		return "register";
 	}
 	
