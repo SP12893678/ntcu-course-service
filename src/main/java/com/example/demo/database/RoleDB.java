@@ -11,4 +11,14 @@ public class RoleDB {
 		String condition = "ID = " + roleID;
 		return jdbcTemplate.queryForList("SELECT * FROM role where " + condition);
 	}
+	
+	public static int insertUserRole(int userID,int roleID, JdbcTemplate jdbcTemplate) {
+		String key = "(UserID,RoleID)";
+		String value =  "('"+ String.join("','", 
+						String.valueOf(userID),
+						String.valueOf(roleID)) +
+						"')";
+		int status = jdbcTemplate.update("Insert Into `member-role` " + key + "Values" + value);
+		return status;
+	}
 }

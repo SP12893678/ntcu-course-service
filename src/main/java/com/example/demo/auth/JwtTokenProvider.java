@@ -1,10 +1,5 @@
 package com.example.demo.auth;
 
-import java.security.Key;
-import java.security.SecureRandom;
-import java.time.LocalDateTime;
-import java.util.Base64;
-import java.util.Base64.*;
 import java.util.Date;
 
 import javax.crypto.SecretKey;
@@ -36,8 +31,8 @@ public class JwtTokenProvider {
 	
 	public String createToken(User user) {
 		SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
-		Date validity = new Date();
-		LocalDateTime.from(validity.toInstant()).plusDays(3);
+        Date date = new Date();
+        Date validity = new Date(date.getTime() + (1000 * 60 * 60 * 24) * 3);
 		Claims claims = Jwts.claims().setSubject(user.getName());
 		claims.put("id", user.getId());
 		claims.put("role", user.getRole());
@@ -46,9 +41,12 @@ public class JwtTokenProvider {
 					.setExpiration(validity)
 					.signWith(key)
 					.compact();
-		
-		System.out.print(jws);
 		return jws;
+	}
+	
+	public Jws<Claims> getClaim(String token) {
+		SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
+		return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
 	}
 	
 	/*驗證token是否過期*/
