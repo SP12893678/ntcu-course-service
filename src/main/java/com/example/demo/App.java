@@ -11,10 +11,12 @@ import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -28,7 +30,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
-
 
 @RestController
 public class App {
@@ -47,13 +48,24 @@ public class App {
 		return "<h1>Welecome to listeningtrain platform service</h1>";
 	}
 	
+//	@ResponseBody
 	@RequestMapping(value = "/api/auth/login", method = RequestMethod.POST)
 	public ObjectNode userLogin(@RequestBody HTTPRequestBody request) throws IOException {
-//		jwtTokenProvider.validateToken(request.getLoginToken());
+		System.out.print("get login request");
+//		boolean vaild = jwtTokenProvider.validateToken(request.getLoginToken());
+//		if(!vaild) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Expired or invalid JWT token");
+		
 		String logintoken = request.getUser().login(jwtTokenProvider,jdbcTemplate);
+		
 	    ObjectNode objectNode = JsonNodeFactory.instance.objectNode();
 	    objectNode.put("loginToken", logintoken);
 	    return objectNode;
+	}
+	
+	@RequestMapping(value = "/test", method = RequestMethod.POST)
+	public String testPost(@RequestBody String request) throws IOException {
+		System.out.print("get login request");
+		return request;
 	}
 	
 	@RequestMapping(value = "/api/auth/register", method = RequestMethod.POST)
@@ -118,3 +130,6 @@ public class App {
 		return request.toString();
 	}
 }
+
+
+

@@ -24,27 +24,27 @@ public class User {
 	private String loginToken;
 	private String verifyToken;
 	private Role role;
-	private int isVerify;
+	private boolean isVerify;
 	private String salt;
 	
 	public String login(JwtTokenProvider jwtTokenProvider,JdbcTemplate jdbcTemplate) {
-		try {
+//		try {
 			List<Map<String, Object>> userList = UserDB.serachUserByEmail(getEmail(),jdbcTemplate);
 			if(userList.size()<=0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong with Email.");
 			setSalt((String) userList.get(0).get("Salt"));
 			/*將密碼加密*/
-	        setPassword(encryptPassword(jwtTokenProvider));
+//	        setPassword(encryptPassword(jwtTokenProvider));
 	        
 	        /*登入驗證*/
-	        boolean isValid = checkPassword((String) userList.get(0).get("Salt")); 
+	        boolean isValid = checkPassword((String) userList.get(0).get("Password")); 
 			if(!isValid) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong with Password.");
 			
 			/*確認是否已信箱認證*/
-			if((int) userList.get(0).get("IsVerify")==0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Need to verify email.");
+			if(!(boolean) userList.get(0).get("IsVerify")) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Need to verify email.");
 			
 			setId((int) userList.get(0).get("ID"));
 			setEmail((String) userList.get(0).get("Email"));
-			setIsVerify((int) userList.get(0).get("IsVerify"));
+			setIsVerify((boolean) userList.get(0).get("IsVerify"));
 			
 			/*取得使用者資料(名稱、身分)*/
 			List<Map<String, Object>> userRoleList = UserDB.getRoleIDByID(getId(), jdbcTemplate);
@@ -53,7 +53,7 @@ public class User {
 			List<Map<String, Object>> roleList = RoleDB.getRoleByID((int) userRoleList.get(0).get("RoleID"), jdbcTemplate);
 			if(roleList.size()<=0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong with user's role.");
 			
-			setRole((Role) roleList.get(0));
+			setRole(new Role((Map<String, Object>) roleList.get(0)));
 			setLoginToken(jwtTokenProvider.createToken(this));
 			
 			/*新增login token*/
@@ -61,9 +61,10 @@ public class User {
 			if(result>0) return getLoginToken();
 			else throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong with create the loignToken.");
 	        
-		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong with login.");
-		}
+//		} catch (Exception e) {
+//			System.out.println(e);
+//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong with login.");
+//		}
 	}
 	
 	public void register(JavaMailSender mailSender,JwtTokenProvider jwtTokenProvider,JdbcTemplate jdbcTemplate) {
@@ -159,11 +160,11 @@ public class User {
 		this.id = id;
 	}
 
-	public int getIsVerify() {
+	public boolean getIsVerify() {
 		return isVerify;
 	}
 
-	public void setIsVerify(int isVerify) {
+	public void setIsVerify(boolean isVerify) {
 		this.isVerify = isVerify;
 	}
 
@@ -188,6 +189,12 @@ public class User {
 		private String name;
 		private int layer;
 		
+		public Role(Map<String, Object> object) {
+			this.id = (int) object.get("id");
+			this.name = (String) object.get("name");
+			this.layer = (int) object.get("layer");
+		}
+
 		public int getId() {
 			return id;
 		}

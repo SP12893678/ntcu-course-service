@@ -60,7 +60,7 @@ public class UserDB {
 	}
 	
 	public static List<Map<String, Object>> getRoleIDByID(int userID, JdbcTemplate jdbcTemplate) {
-		String condition = "ID = " + userID;
-		return jdbcTemplate.queryForList("SELECT * FROM member-role where " + condition);
+		String condition = "UserID = " + userID;
+		return jdbcTemplate.queryForList("SELECT * FROM `member-role` where " + condition);
 	}
 }
