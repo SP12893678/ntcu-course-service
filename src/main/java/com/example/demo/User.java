@@ -32,21 +32,21 @@ public class User {
 			List<Map<String, Object>> userList = UserDB.serachUserByEmail(getEmail(),jdbcTemplate);
 			if(userList.size()<=0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong with Email.");
 			setSalt((String) userList.get(0).get("Salt"));
-			/*±N±K½X¥[±K*/
+			/*å°‡å¯†ç¢¼åŠ å¯†*/
 //	        setPassword(encryptPassword(jwtTokenProvider));
 	        
-	        /*µn¤JÅçÃÒ*/
+	        /*ç™»å…¥é©—è­‰*/
 	        boolean isValid = checkPassword((String) userList.get(0).get("Password")); 
 			if(!isValid) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong with Password.");
 			
-			/*½T»{¬O§_¤w«H½c»{ÃÒ*/
+			/*ç¢ºèªæ˜¯å¦å·²ä¿¡ç®±èªè­‰*/
 			if(!(boolean) userList.get(0).get("IsVerify")) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Need to verify email.");
 			
 			setId((int) userList.get(0).get("ID"));
 			setEmail((String) userList.get(0).get("Email"));
 			setIsVerify((boolean) userList.get(0).get("IsVerify"));
 			
-			/*¨ú±o¨Ï¥ÎªÌ¸ê®Æ(¦WºÙ¡B¨­¤À)*/
+			/*å–å¾—ä½¿ç”¨è€…è³‡æ–™(åç¨±ã€èº«åˆ†)*/
 			List<Map<String, Object>> userRoleList = UserDB.getRoleIDByID(getId(), jdbcTemplate);
 			if(userRoleList.size()<=0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"user's role is empty");
 			
@@ -56,7 +56,7 @@ public class User {
 			setRole(new Role((Map<String, Object>) roleList.get(0)));
 			setLoginToken(jwtTokenProvider.createToken(this));
 			
-			/*·s¼Wlogin token*/
+			/*æ–°å¢žlogin token*/
 			int result = UserDB.updateLoginToken(getId(),getLoginToken(),jdbcTemplate);
 			if(result>0) return getLoginToken();
 			else throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong with create the loignToken.");
@@ -69,24 +69,24 @@ public class User {
 	
 	public void register(JavaMailSender mailSender,JwtTokenProvider jwtTokenProvider,JdbcTemplate jdbcTemplate) {
 		try {
-			/*±N±K½X¥[±K*/
+			/*å°‡å¯†ç¢¼åŠ å¯†*/
 			setSalt(BCrypt.gensalt(11));
 	        setPassword(encryptPassword(jwtTokenProvider));
 	          
-			/*±N¥Î¤á¸ê®Æ·s¼W¨ì¸ê®Æªí*/
+			/*å°‡ç”¨æˆ¶è³‡æ–™æ–°å¢žåˆ°è³‡æ–™è¡¨*/
 	        int result = UserDB.insertUser(this,jdbcTemplate);
 	        if(result<=0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong with insert user data.");
 	        
-	        /*¨ú±o¨Ï¥ÎªÌ¸ê®Æ*/
+	        /*å–å¾—ä½¿ç”¨è€…è³‡æ–™*/
 	        List<Map<String, Object>> userList = UserDB.serachUserByLogin(this,jdbcTemplate);
 			if(userList.size()<=0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong with Email or Password.");
 			setId((int) userList.get(0).get("ID"));
 
-			/*·s¼Wverify token*/
+			/*æ–°å¢žverify token*/
 			setVerifyToken(jwtTokenProvider.createToken(this));
 			result = UserDB.updateVerifyToken(getId(),getVerifyToken(),jdbcTemplate);
 			
-			/*µo°e«H½cÅçÃÒ«H¥ó*/
+			/*ç™¼é€ä¿¡ç®±é©—è­‰ä¿¡ä»¶*/
 			if(result>0) sendVerifyMail(mailSender);
 			else throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong with update verify token.");
 	        
@@ -99,7 +99,7 @@ public class User {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setFrom("office1289367@gmail.com");
         mail.setTo("office1289366@gmail.com");
-        mail.setSubject("·|­ûµù¥U«H½cÅçÃÒ");
+        mail.setSubject("æœƒå“¡è¨»å†Šä¿¡ç®±é©—è­‰");
         mail.setText("<a href=\"http:127.0.0.1:9090/api/auth/verify/"+ getVerifyToken() + "\">"+ getVerifyToken() +"</a>");
         mailSender.send(mail);
 	}

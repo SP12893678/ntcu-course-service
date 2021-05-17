@@ -24,14 +24,14 @@ public class CourseDetector {
 		System.out.print(new JwtTokenProvider().getKey());
 		
 		
-		/*¨ú±oµ¥«İ¬d¸ßªº½Òµ{³qª¾²M³æ*/
+		/*å–å¾—ç­‰å¾…æŸ¥è©¢çš„èª²ç¨‹é€šçŸ¥æ¸…å–®*/
 		List<Map<String, Object>> noticeList = NoticeDB.searchAllWaitingCourseNotice(jdbcTemplate);
 		System.out.print(noticeList.get(0).toString());
-		/*¨ú±o³Q¬d¸ßªº½Òµ{*/
+		/*å–å¾—è¢«æŸ¥è©¢çš„èª²ç¨‹*/
 		List<Map<String, Object>> courseList = CourseDB.getCourseByID((int) noticeList.get(0).get("Course_ID"), jdbcTemplate);
 		System.out.print(courseList.get(0).toString());
 		
-		/*¬d¸ß½Òµ{¤H¼Æ¾lÃB*/
+		/*æŸ¥è©¢èª²ç¨‹äººæ•¸é¤˜é¡*/
 		int nums = CourseHelper.getCourseRemainingNums(new Course(courseList.get(0)));
 		System.out.println(nums);
 	}

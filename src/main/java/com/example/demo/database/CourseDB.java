@@ -19,7 +19,7 @@ public class CourseDB {
 	}
 	
 	/*
-	 * ¨ú±o½Òµ{ÂÇ¥Ñ½Òµ{ID
+	 * å–å¾—èª²ç¨‹è—‰ç”±èª²ç¨‹ID
 	 */
 	public static List<Map<String, Object>> getCourseByID(int courseID, JdbcTemplate jdbcTemplate) {
 		String condition = "id = " + courseID;
@@ -27,7 +27,7 @@ public class CourseDB {
 	}
 	
 	/*
-	 * ¬d¸ß½Òµ{¬O§_¦s¦b©ó½Òµ{¸ê®Æªí
+	 * æŸ¥è©¢èª²ç¨‹æ˜¯å¦å­˜åœ¨æ–¼èª²ç¨‹è³‡æ–™è¡¨
 	 */
 	public static List<Map<String, Object>> searchCourse(Course course, JdbcTemplate jdbcTemplate) {
 		String condition = "txtYears = '" + course.getTxtYears() + 
@@ -39,7 +39,7 @@ public class CourseDB {
 	}
 	
 	/*
-	 * ·s¼W½Òµ{¦Ü½Òµ{¸ê®Æªí
+	 * æ–°å¢èª²ç¨‹è‡³èª²ç¨‹è³‡æ–™è¡¨
 	 */
 	public static int insertCourse(Course course, JdbcTemplate jdbcTemplate) {
 		String key = "(txtYears,txtTerm,ddlEdu,ddlDept,code)";

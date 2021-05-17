@@ -77,7 +77,7 @@ public class App {
 	@RequestMapping(value = "/api/auth/verify/{verifyToken}", method = RequestMethod.GET)
 	public String userVerify(@PathVariable String verifyToken) throws IOException {
 		Jws<Claims> claims = jwtTokenProvider.getClaim(verifyToken);
-		/*¨ú±o¨Ï¥ÎªÌ¸ê®Æ(¦WºÙ¡B¨­¤À)*/
+		/*å–å¾—ä½¿ç”¨è€…è³‡æ–™(åç¨±ã€èº«åˆ†)*/
 		int id = (int) claims.getBody().get("id");
 		List<Map<String, Object>> userList = UserDB.serachUserByID(id, jdbcTemplate);
 		if(userList.size()<=0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"user is not found.");
@@ -85,7 +85,7 @@ public class App {
 		boolean IsVerify = (boolean) userList.get(0).get("IsVerify");
 		if(IsVerify) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"has already verify.");
 		
-		//·s¼W¨Ï¥ÎªÌ¨¤¦â
+		//æ–°å¢ä½¿ç”¨è€…è§’è‰²
 		int status = RoleDB.insertUserRole(id,1,jdbcTemplate);
 		if(status<=0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong with add user role.");
 		
@@ -102,12 +102,12 @@ public class App {
 	
 	@RequestMapping(value = "/requesCN", method = RequestMethod.POST)
 	public String requesCourseNotice(@RequestBody Course request) {
-		/*¬d¸ß½Òµ{²M³æ¬O§_¤w¦s¦b*/
+		/*æŸ¥è©¢èª²ç¨‹æ¸…å–®æ˜¯å¦å·²å­˜åœ¨*/
 		List<Map<String, Object>> rows = CourseDB.searchCourse(request,jdbcTemplate);
 		System.out.print(rows.size());
-		/*­YµL«h¦s¤J½Òµ{²M³æ*/
+		/*è‹¥ç„¡å‰‡å­˜å…¥èª²ç¨‹æ¸…å–®*/
 		if(rows.size() <= 0) {
-			/*ÅçÃÒ½Òµ{¬O§_¦s¦b©ó¾Ç®Õ*/
+			/*é©—è­‰èª²ç¨‹æ˜¯å¦å­˜åœ¨æ–¼å­¸æ ¡*/
 			
 			int status = CourseDB.insertCourse(request,jdbcTemplate);
 			System.out.print(status);
@@ -118,11 +118,11 @@ public class App {
 		int userID = 1;
 		System.out.print(rows.get(0).get("id"));
 		
-		/*ÅçÃÒ½Òµ{«İ³qª¾¬O§_¦s¦b*/
+		/*é©—è­‰èª²ç¨‹å¾…é€šçŸ¥æ˜¯å¦å­˜åœ¨*/
 		rows = NoticeDB.searchWaitingCourseNoticeByUser(courseID, userID, jdbcTemplate);
 		System.out.print(rows.size());
 	
-		/*·s¼W³qª¾²M³æ*/
+		/*æ–°å¢é€šçŸ¥æ¸…å–®*/
 		if(rows.size() <= 0) {
 			int status = NoticeDB.insertCourseNotice(courseID, userID, jdbcTemplate);
 			System.out.print(status);

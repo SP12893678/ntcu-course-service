@@ -25,11 +25,11 @@ public class CourseHelper {
 		driver.navigate().to("http://ecs.ntcu.edu.tw/pub/TchSchedule_Search.aspx");
 		
 		WebDriverWait wait = new WebDriverWait(driver, 5);
-		/*¾Ç¦~¿é¤J*/
+		/*å­¸å¹´è¼¸å…¥*/
 		WebElement txtYearsInput = driver.findElement(By.id("txtYears"));
 		txtYearsInput.sendKeys("value", course.getTxtYears());
 		
-		/*¾Ç´Á¿ï¾Ü*/
+		/*å­¸æœŸé¸æ“‡*/
 		Select txtTermInput = new Select(driver.findElement(By.id("txtTerm")));
 		int txtTermIdx = IntStream.range(0, txtTermInput.getOptions().size())
 	    .filter(i -> txtTermInput.getOptions().get(i).getAttribute("value").equals(course.getTxtTerm()))
@@ -38,7 +38,7 @@ public class CourseHelper {
 		
 		txtTermInput.selectByIndex(txtTermIdx);
 		
-		/*¾Ç¨î¿ï¾Ü*/
+		/*å­¸åˆ¶é¸æ“‡*/
 		Select ddlEduInput = new Select(driver.findElement(By.id("ddlEdu")));
 		int ddlEduIdx = IntStream.range(0, ddlEduInput.getOptions().size())
 	    .filter(i -> ddlEduInput.getOptions().get(i).getAttribute("value").equals(course.getDdlEdu()))
@@ -49,7 +49,7 @@ public class CourseHelper {
 		
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("select[id*='ddlDept']>option[value='-1']")));
 	
-		/*¾Ç¨t¿ï¾Ü*/
+		/*å­¸ç³»é¸æ“‡*/
 		Select ddlDeptInput = new Select(driver.findElement(By.id("ddlDept")));
 		int ddlDeptIdx = IntStream.range(0, ddlDeptInput.getOptions().size())
 			    .filter(i -> ddlDeptInput.getOptions().get(i).getAttribute("value").equals(course.getDdlDept()))

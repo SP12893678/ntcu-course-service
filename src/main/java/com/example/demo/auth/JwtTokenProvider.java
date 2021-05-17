@@ -49,7 +49,7 @@ public class JwtTokenProvider {
 		return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
 	}
 	
-	/*ÅçÃÒtoken¬O§_¹L´Á*/
+	/*é©—è­‰tokenæ˜¯å¦éæœŸ*/
 	public boolean validateToken(String token) {
 		try {
 			SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));

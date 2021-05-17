@@ -14,7 +14,7 @@ public class NoticeDB {
 	}
 	
 	/*
-	 * ¬d¸ß½Òµ{³qª¾¬O§_¤w¦s¦b©ó³qª¾¸ê®Æªí
+	 * æŸ¥è©¢èª²ç¨‹é€šçŸ¥æ˜¯å¦å·²å­˜åœ¨æ–¼é€šçŸ¥è³‡æ–™è¡¨
 	 */
 	public static List<Map<String, Object>> searchWaitingCourseNoticeByUser(int courseID, int userID, JdbcTemplate jdbcTemplate) {
 		String condition = "Course_ID = " + courseID + 
@@ -24,7 +24,7 @@ public class NoticeDB {
 	}
 	
 	/*
-	 * ¬d¸ß¥¿µ¥«İªº½Òµ{³qª¾¸ê®Æªí
+	 * æŸ¥è©¢æ­£ç­‰å¾…çš„èª²ç¨‹é€šçŸ¥è³‡æ–™è¡¨
 	 */
 	public static List<Map<String, Object>> searchAllWaitingCourseNotice(JdbcTemplate jdbcTemplate) {
 		String condition = "Status = 'waiting'";
@@ -32,7 +32,7 @@ public class NoticeDB {
 	}
 	
 	/*
-	 * ·s¼W½Òµ{³qª¾¦Ü³qª¾¸ê®Æªí
+	 * æ–°å¢èª²ç¨‹é€šçŸ¥è‡³é€šçŸ¥è³‡æ–™è¡¨
 	 */
 	public static int insertCourseNotice(int courseID, int userID, JdbcTemplate jdbcTemplate) {
 		String key = "(Course_ID, User_ID)";
@@ -42,7 +42,7 @@ public class NoticeDB {
 	}
 	
 	/*
-	 * §ó·s½Òµ{³qª¾ª¬ºA¬°§¹¦¨
+	 * æ›´æ–°èª²ç¨‹é€šçŸ¥ç‹€æ…‹ç‚ºå®Œæˆ
 	 */
 	public static int updateCourseNoticeToFinished(String noticeID, JdbcTemplate jdbcTemplate) {
 		String condition = "ID = '" + noticeID + "'";
