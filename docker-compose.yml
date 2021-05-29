@@ -1,0 +1,30 @@
+# docker-compose的版本
+version: '2'
+services:
+   db:
+      image: mysql
+      environment:
+         MYSQL_ROOT_PASSWORD: 12893678
+      ports:
+         - 3306:3306
+   admin:
+      image: adminer
+      ports:
+         - 8081:8080
+      depends_on:
+         - db
+   web:
+      build:
+         context: .
+         dockerfile: Dockerfile
+      # image: spring-docker-jar:latest
+      entrypoint: ["java","-jar","/app.jar"]
+      restart: always
+      environment:
+         SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/listen
+         SPRING_DATASOURCE_USERNAME: root
+         SPRING_DATASOURCE_PASSWORD: 12893678
+      ports:
+         - 9090:9090
+      depends_on:
+         - db

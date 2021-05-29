@@ -2,7 +2,6 @@ plugins {
 	id 'org.springframework.boot' version '2.4.5'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
-	id 'war'
 }
 
 group = 'com.example'
@@ -19,7 +18,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	runtimeOnly 'mysql:mysql-connector-java'
 	compile group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	// providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compile("org.springframework.boot:spring-boot-starter-mail")
 	compile 'io.jsonwebtoken:jjwt-api:0.11.2'
