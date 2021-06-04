@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.4.5'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'jacoco'
 }
 
 group = 'com.example'
@@ -28,6 +29,26 @@ dependencies {
             'io.jsonwebtoken:jjwt-jackson:0.11.2' // or 'io.jsonwebtoken:jjwt-gson:0.11.2' for gson
 }
 
+// test {
+// 	useJUnitPlatform()
+// 	finalizedBy jacocoTestReport
+// }
+
+// jacocoTestReport {
+//     reports {
+//         xml.enabled false
+//         csv.enabled false
+//         html.destination file("${buildDir}/jacocoHtml")
+//     }
+// }
 test {
 	useJUnitPlatform()
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+}
+jacoco {
+    toolVersion = "0.8.6"
+    reportsDirectory = file("$buildDir/jacocotest")
 }
